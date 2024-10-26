@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import CartDrawer from "./CartDrawer";
+import CartDrawer from "../CartDrawer";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm p-4 pt-4">
+    <nav className="bg-white shadow-sm p-4 pt-4 fixed top-0 w-full z-50">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo and Title */}
         <Link href="/" className="flex items-center">

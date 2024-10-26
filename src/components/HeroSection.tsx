@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-r from-orange-400 to-red-500 py-12 md:py-24">
+    <section className="bg-gradient-to-r from-orange-400 to-red-500 py-12 md:py-24 mt-20">
       <div className=" container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between">
         {/* Text Section */}
         <div className="md:w-1/2 mb-12 md:mb-0 ">

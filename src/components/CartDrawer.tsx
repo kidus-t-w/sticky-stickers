@@ -1,13 +1,45 @@
 "use client";
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../lib/store"; // Adjust the path to your store
 import Image from "next/image";
 import Link from "next/link";
+import { addItem, removeItem, updateItemQuantity, clearCart } from "../lib/features/cart/cart-slice"; // Import actions
+
+// Define CartItem type if not already defined
+interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  size: string;
+  imageUrl: string;
+}
 
 const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch(); // Initialize dispatch
+  const cartItems: CartItem[] = useSelector((state: RootState) => state.cart.items); // Use the CartItem type
+  const totalAmount = useSelector((state: RootState) => state.cart.totalAmount); // Accessing total amount
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
+  };
+
+  const increaseQuantity = (item: CartItem) => {
+    dispatch(addItem({ ...item, quantity: 1 })); // Reuse addItem action to increase quantity
+  };
+
+  const decreaseQuantity = (item: CartItem) => {
+    if (item.quantity > 1) {
+      dispatch(updateItemQuantity({ id: item.id, quantity: item.quantity - 1 })); // Decrease quantity
+    } else {
+      dispatch(removeItem(item.id)); // Remove item if quantity is 1
+    }
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart()); // Dispatch the clearCart action
   };
 
   return (
@@ -15,7 +47,7 @@ const CartDrawer = () => {
       {/* Cart Button (could be placed in your navbar) */}
       <button onClick={toggleDrawer}>
         <div className="inline-block bg-orange-500 text-white px-4 py-2 rounded-full">
-          Br 00.0
+          Br {totalAmount.toFixed(2)} {/* Display total amount */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -54,53 +86,81 @@ const CartDrawer = () => {
             &times;
           </button>
         </div>
+
         <div className="p-4 space-y-4 overflow-y-auto">
-          {/* Cart Item */}
-          <div className="flex justify-between items-center border-b pb-4">
-            <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Product Image"
-                width={60}
-                height={60}
-              />
-              <div className="ml-4">
-                <h3 className="text-sm font-semibold">Code Is Art T-Shirt</h3>
-                <p className="text-sm text-gray-500">Size: M</p>
-                <div className="flex items-center mt-2">
-                  <button className="border px-2">-</button>
-                  <span className="mx-2">2</span>
-                  <button className="border px-2">+</button>
+          {/* Display cart items dynamically */}
+          {cartItems.length > 0 ? (
+            cartItems.map((item: CartItem) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center border-b pb-4"
+              >
+                <div className="flex items-center">
+                  <Image
+                    src={item.imageUrl ? item.imageUrl : "/assets/temp.jpg"}
+                    alt={item.title}
+                    width={60}
+                    height={60}
+                  />
+                  <div className="ml-4">
+                    <h3 className="text-sm font-semibold">{item.title}</h3>
+                    <p className="text-sm text-gray-500">Size: {item.size}</p>
+                    <div className="flex items-center mt-2">
+                      <button
+                        onClick={() => decreaseQuantity(item)}
+                        className="border px-2"
+                      >
+                        -
+                      </button>
+                      <span className="mx-2">{item.quantity}</span>
+                      <button
+                        onClick={() => increaseQuantity(item)}
+                        className="border px-2"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-lg font-bold">${item.price}</p>
                 </div>
               </div>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 line-through">$50.00</p>
-              <p className="text-lg font-bold">$25.00</p>
-            </div>
-          </div>
-
-          {/* Repeat Cart Items as needed */}
-          {/* ... */}
+            ))
+          ) : (
+            <p>Your cart is empty</p>
+          )}
         </div>
 
         <div className="p-4 border-t">
           <div className="flex justify-between items-center">
             <p className="text-lg font-bold">Total:</p>
-            <p className="text-lg font-bold">$50.00</p>
+            <p className="text-lg font-bold">${totalAmount.toFixed(2)}</p>
           </div>
           <Link href="/checkout">
-            <button onClick={toggleDrawer} className="bg-blue-500 text-white w-full py-2 rounded-lg mt-4">
+            <button
+              onClick={toggleDrawer}
+              className="bg-blue-500 text-white w-full py-2 rounded-lg mt-4"
+            >
               Checkout
             </button>
           </Link>
-          <p className="text-center text-sm mt-2">
+          <div className="text-center text-sm mt-2">
             <Link href="/shop">
               <p className="text-blue-500 hover:underline">
                 Or continue shopping
               </p>
             </Link>
-          </p>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <button
+            onClick={handleClearCart}
+            className="bg-red-500 text-white w-full py-2 rounded-lg"
+          >
+            Clear Cart
+          </button>
         </div>
       </div>
     </>

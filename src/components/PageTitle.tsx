@@ -6,7 +6,7 @@ type PageTitleProps = {
 
 const PageTitle: React.FC<PageTitleProps> = ({ title }) => {
   return (
-    <div className="flex items-center mt-6">
+    <div className="flex items-center mt-32">
       {/* Left Orange Div */}
       <div className="bg-gradient-to-r from-orange-500 to-red-500 h-16 w-8 md:w-56 rounded-r-full"></div>
       

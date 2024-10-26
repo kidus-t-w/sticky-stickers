@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MdDashboard } from "react-icons/md";
-import { IoMenu, IoPeopleSharp, IoReceiptSharp, IoSettings } from "react-icons/io5";
+import {
+  IoMenu,
+  IoPeopleSharp,
+  IoReceiptSharp,
+  IoSettings,
+} from "react-icons/io5";
 import { FaArrowAltCircleLeft, FaStore } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 
@@ -25,12 +30,20 @@ const SideBar = () => {
     >
       <div>
         {/* Toggle Button */}
-        <div className={`${isCollapsed ? "flex justify-start": "flex justify-end"}`}>
+        <div
+          className={`${
+            isCollapsed ? "flex justify-start" : "flex justify-end"
+          }`}
+        >
           <button
             onClick={toggleSidebar}
             className="mb-4 text-gray-700 focus:outline-none"
           >
-            {isCollapsed ? <IoMenu className="text-3xl"/> : <GrClose  className="text-2xl"/>}
+            {isCollapsed ? (
+              <IoMenu className="text-3xl" />
+            ) : (
+              <GrClose className="text-2xl" />
+            )}
           </button>
         </div>
 
@@ -44,9 +57,7 @@ const SideBar = () => {
           )}
         </Link>
 
-        {!isCollapsed && (
-          <h3 className="text-sm uppercase mb-6 text-gray-700">Menu</h3>
-        )}
+        <h3 className="text-sm uppercase mb-6 text-gray-700">Menu</h3>
 
         {/* Menu Items */}
         <nav className="space-y-4">
@@ -68,12 +79,7 @@ const SideBar = () => {
               {!isCollapsed && <span className="ml-3">Products</span>}
             </p>
           </Link>
-          <Link href="/dashboard/users">
-            <p className="flex items-center rounded-lg text-gray-700 h-14 hover:bg-orange-200">
-              <IoPeopleSharp className="text-2xl mx-1" />
-              {!isCollapsed && <span className="ml-3">Users</span>}
-            </p>
-          </Link>
+        
           <Link href="/dashboard/settings/access">
             <p className="flex items-center rounded-lg text-gray-700 h-14 hover:bg-orange-200">
               <IoSettings className="text-2xl mx-1" />

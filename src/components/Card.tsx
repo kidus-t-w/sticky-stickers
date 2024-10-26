@@ -1,41 +1,61 @@
-'use client'
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import AddToCartPopup from './AddToCartPopup';
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import AddToCartPopup from "./AddToCartPopup";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
 
-const ProductCard = () => {
+interface Product {
+  _id: string;
+  user: string;
+  productName: string;
+  description: string;
+  productStatus: string;
+  category: string;
+  numOrders: number;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  tags?: string[]; // Optional array of tags
+  tag?: string; // Optional single tag
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleAddToCart = (size: string, quantity: number) => {
-    console.log(`Size: ${size}, Quantity: ${quantity}`);
-    // Handle the logic to add the item to the cart
-  };
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="  overflow-hidden">
       {/* Image Section */}
-      <div className="p-2">
-        <Image src="/assets/temp.jpg" alt="Product Image" width={150} height={150} className="object-cover mx-auto" />
+      <div className="">
+        <Image
+          src={product.imageUrl ? product.imageUrl : "/assets/temp.png"}
+          alt="Product Image"
+          width={150}
+          height={150}
+          className="object-contain w-[150px] h-[150px] mx-auto shadow-md rounded-2xl bg-white p-2"
+        />{" "}
       </div>
-
+      {/* <hr className="w-[140px]  rounded-full mx-auto border-t-2"></hr> */}
       {/* Order Button */}
-      <div className="bg-white-100 py-2 px-2 text-center">
-      <button
-        onClick={() => setShowPopup(true)}
-        className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg w-full"
-      >
-        Add to Cart
-      </button>
+      <div className="bg-white-100 py-2 text-center ">
+        <button
+          onClick={() => setShowPopup(true)}
+          className="bg-white hover:bg-orange-500 hover:text-white text-gray-700 border-2 border-orange-700 font-semibold py-2 px-6 rounded-2xl inline-flex items-center gap-2"
+        >
+          <MdOutlineAddShoppingCart />
+          <span>Add to Cart</span>
+        </button>
 
-      {showPopup && (
-        <AddToCartPopup
-          onClose={() => setShowPopup(false)}
-          onAddToCart={handleAddToCart}
-        />
-      )}
-        {/* <Link href="/order" className="w-full inline-block bg-yellow-300 text-gray-700 px-2 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-400">
-          <span className="mr-2 font-extrabold">+</span>Add to Cart
-        </Link> */}
+        {showPopup && (
+          <AddToCartPopup
+            onClose={() => setShowPopup(false)}
+            product={product}
+          />
+        )}
       </div>
     </div>
   );
